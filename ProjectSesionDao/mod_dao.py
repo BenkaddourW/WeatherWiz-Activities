@@ -8,9 +8,14 @@ from flask import Flask, jsonify, request
 
 app=Flask(__name__)
 
+# def creer_connexion():
+#     #creer connecion
+#     return sqlite3.connect('WeatherWizBD.dbf')
 def creer_connexion():
-    #creer connecion
-    return sqlite3.connect('WeatherWizBD.dbf')
+    # On demande à Flask : "Y a-t-il une BDD de test configurée ?"
+    # Si oui, on l'utilise. Sinon (en prod), on prend 'WeatherWizBD.dbf'
+    db_path = app.config.get('DATABASE', 'WeatherWizBD.dbf')
+    return sqlite3.connect(db_path)
 
 def fermer_connexion(conn):
     conn.close()
@@ -28,6 +33,9 @@ def creer_table(cde_ddl):
 def inserer_data():
     data=request.get_json()
     #insertion
+    if 'condition' not in data or 'reponse' not in data:
+        return jsonify({'error': 'Données incomplètes'}), 400
+
     cde_ins = '''insert into activite(condition,reponse)values(?,?)
     '''
     # obtenir connexion
