@@ -28,7 +28,8 @@ jobs:
     - name: 📦 Installation des dépendances
       run: |
         python -m pip install --upgrade pip
-        pip install Flask pytest
+        pytest
+        pip install Flask pytest 
 
     # Étape D : L'instant de vérité, le serveur lance ton script de test !
     - name: 🧪 Lancement des tests Pytest
